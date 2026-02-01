@@ -1,0 +1,4 @@
+orderID,customer,orderValue,country,status
+2001,Bad Order,-50,USA,NEW
+2002,Missing Status,120,UK
+2003,Invalid Status,300,Germany,DELIVERED
