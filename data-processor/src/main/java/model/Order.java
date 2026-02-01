@@ -1,13 +1,18 @@
 package model;
 
-public class Order {
-	int orderID;
-	String customer;
-	double orderValue;
-	String country;
-	OrderStatus status;
-	
-	public Order(int orderID, String customer, double orderValue, String country, OrderStatus status) {
+import rules.BusinessRules;
+
+public class Order
+{
+	private int orderID;
+	private String customer;
+	private double orderValue;
+	private String country;
+	private OrderStatus status;
+	private Flag flag;
+
+	public Order(int orderID, String customer, double orderValue, String country, OrderStatus status)
+	{
 		this.orderID = orderID;
 		this.customer = customer;
 		if (orderValue > 0)
@@ -20,18 +25,27 @@ public class Order {
 		}
 		this.country = country;
 		this.status = status;
+		
+		if (this.orderValue > BusinessRules.getHighValueLimit())
+		{
+			flag = Flag.HIGH_VALUE;
+		}
+		
+		if (this.flag == null)
+			this.flag = Flag.NONE;
 	}
 
-	public enum OrderStatus {
+	public enum OrderStatus
+	{
 		NEW,
 		PAID,
 		SHIPPED,
 		ON_HOLD,
 		COMPLETED;
-		
+
 		public boolean canTransitionTo(OrderStatus next)
 		{
-			switch(this)
+			switch (this)
 			{
 			case NEW:
 				return next == PAID || next == ON_HOLD;
@@ -47,6 +61,13 @@ public class Order {
 		}
 	}
 
+	public enum Flag
+	{
+		NONE,
+		HIGH_VALUE,
+		EXPORT_CHECK;
+	}
+
 	public OrderStatus getStatus()
 	{
 		return status;
@@ -54,7 +75,7 @@ public class Order {
 
 	public void setStatus(OrderStatus status)
 	{
-		if(this.status.canTransitionTo(status))
+		if (this.status.canTransitionTo(status))
 		{
 			this.status = status;
 		}
@@ -86,5 +107,10 @@ public class Order {
 		return "Order [orderID=" + orderID + ", customer=" + customer + ", orderValue=" + orderValue + ", country="
 				+ country + ", status=" + status + "]";
 	}
-	
+
+	public Flag getFlag()
+	{
+		return flag;
+	}
+
 }
