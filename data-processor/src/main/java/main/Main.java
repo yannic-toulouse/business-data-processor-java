@@ -20,13 +20,12 @@ public class Main
 		
 		ArrayList<Order> orderList = FileUtils.processCSV(file);
 		AsciiTable table = new AsciiTable();
-		
 		table.addRule();
-		table.addRow("Order ID", "Customer", "Order Value", "Country", "Status", "Flag");
+		table.addRow("Order ID", "Customer", "Order Value", "Country", "Status", "Flags");
 		for (Order item : orderList)
 		{
 			table.addRule();
-			table.addRow(item.getOrderID(), item.getCustomer(), item.getOrderValue(), item.getCountry(), item.getStatus(), item.getFlag());
+			table.addRow(item.getOrderID(), item.getCustomer(), item.getOrderValue(), item.getCountry(), item.getStatus(), item.flagAsString());
 		}
 		table.addRule();
 		System.out.println(table.render());

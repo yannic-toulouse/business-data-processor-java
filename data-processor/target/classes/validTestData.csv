@@ -1,9 +1,9 @@
 orderID,customer,orderValue,country,status
-1001,John Smith,249.99,USA,NEW
-1002,Alice Johnson,499.50,Canada,PAID
-1003,Marco Rossi,129.95,Italy,SHIPPED
-1004,Sophie Dubois,89.99,France,ON HOLD
-1005,Akira Tanaka,11000.00,Japan,COMPLETED
-1006,Maria Garcia,59.95,Spain,PAID
-1007,Liam O'Connor,149.75,Ireland,NEW
-1008,Chen Wei,349.40,China,ON HOLD
+1001,John Smith,249.99,US,NEW
+1002,Alice Johnson,499.50,CA,PAID
+1003,Marco Rossi,129.95,IT,SHIPPED
+1004,Sophie Dubois,89.99,FR,ON HOLD
+1005,Akira Tanaka,11000.00,JP,COMPLETED
+1006,Maria Garcia,59.95,SP,PAID
+1007,Liam O'Connor,149.75,IR,NEW
+1008,Chen Wei,349.40,CN,ON HOLD
