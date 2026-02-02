@@ -13,6 +13,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		File file;
+		System.out.println("Path to CSV file:");
 		try(Scanner scan = new Scanner(System.in))
 		{
 			file = new File(scan.nextLine().trim());

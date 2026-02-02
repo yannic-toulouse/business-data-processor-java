@@ -73,6 +73,10 @@ public class FileUtils
 					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its order value was negative");
 					continue;
 				}
+				catch (IllegalArgumentException e)
+				{
+					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its order id (" + orderID + ") was not unique");
+				}
 			}
 		}
 		catch (IOException | IllegalArgumentException | CsvException e)

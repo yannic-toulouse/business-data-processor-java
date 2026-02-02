@@ -7,6 +7,8 @@ import rules.BusinessRules;
 
 public class Order
 {
+	private static ArrayList<String> orderIDList = new ArrayList<String>();
+	
 	private String orderID;
 	private String customer;
 	private BigDecimal orderValue;
@@ -16,7 +18,11 @@ public class Order
 
 	public Order(String orderID, String customer, BigDecimal orderValue, String country, OrderStatus status)
 	{
+		if (orderIDList.contains(orderID))
+			throw new IllegalArgumentException("Order IDs must be unique!");
+		
 		this.orderID = orderID;
+		orderIDList.add(orderID);
 		this.customer = customer;
 		if (orderValue.compareTo(new BigDecimal(0)) >= 0)
 		{
