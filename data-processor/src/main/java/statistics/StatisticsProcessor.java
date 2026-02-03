@@ -9,8 +9,12 @@ import model.Order;
 
 public class StatisticsProcessor
 {
+	public static int getOrderCount(List<Order> orderList)
+	{
+		return orderList.size();
+	}
 
-	public BigDecimal getTotalOrderValue (List<Order> orderList)
+	public static BigDecimal getTotalOrderValue (List<Order> orderList)
 	{
 		BigDecimal sum = BigDecimal.ZERO;
 		for (Order order : orderList)
@@ -32,10 +36,25 @@ public class StatisticsProcessor
 		return sum.divide(cnt);
 	}
 	
+	public static BigDecimal getLowestOrderValue (List<Order> orderList)
+	{
+		if(orderList.isEmpty())
+			return null;
+		BigDecimal min = BigDecimal.ZERO;
+		for(Order order : orderList)
+		{
+			if(order.getOrderValue().compareTo(min) < 0)
+			{
+				min = order.getOrderValue();
+			}
+		}
+		return min;
+	}
+	
 	public static BigDecimal getHighestOrderValue (List<Order> orderList)
 	{
 		if(orderList.isEmpty())
-			return BigDecimal.ZERO;
+			return null;
 		BigDecimal max = BigDecimal.ZERO;
 		for(Order order : orderList)
 		{
