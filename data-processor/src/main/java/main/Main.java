@@ -1,9 +1,12 @@
 package main;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import config.ConfigLoader;
+import config.CsvColumnConfig;
 import de.vandermeer.asciitable.AsciiTable;
 import model.Order;
 import statistics.StatisticsProcessor;
@@ -14,10 +17,37 @@ public class Main
 	public static void main(String[] args)
 	{
 		File file;
+		CsvColumnConfig columnConfig;
+		String configPath;
 		try(Scanner scan = new Scanner(System.in))
 		{
 			while(true)
 			{
+				System.out.println("Do you want to use the default CSV-Column config? (y/n)");
+				char useDefColumns = scan.nextLine().toLowerCase().charAt(0);
+				switch(useDefColumns)
+				{
+				case 'y':
+					columnConfig = new CsvColumnConfig();
+					break;
+				case 'n':
+					System.out.println("Path to properties file:");
+					configPath = scan.nextLine();
+					try
+					{
+						columnConfig = new CsvColumnConfig(ConfigLoader.load(configPath));
+					}
+					catch (IOException e)
+					{
+						System.out.println("Failed to load config. Falling back to default config.\n" + 
+								"Detailed error message: " + e.getLocalizedMessage());
+						columnConfig = new CsvColumnConfig();
+					}
+					break;
+				default:
+					System.out.println("Please only enter the values 'y' or 'n'!");
+					continue;
+				}
 				System.out.println("Path to CSV file:");
 				file = new File(scan.nextLine().trim());
 				
@@ -28,7 +58,7 @@ public class Main
 			}
 		}
 
-		ArrayList<Order> orderList = FileUtils.processCSV(file);
+		ArrayList<Order> orderList = FileUtils.processCSV(columnConfig, file);
 		AsciiTable table = new AsciiTable();
 		table.addRule();
 		table.addRow("Order ID", "Customer", "Order Value", "Country", "Status", "Flags");

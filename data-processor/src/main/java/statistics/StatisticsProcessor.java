@@ -1,6 +1,7 @@
 package statistics;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class StatisticsProcessor
 				cnt = cnt.add(BigDecimal.ONE);
 				sum = sum.add(order.getOrderValue());
 			}
-			return sum.divide(cnt);
+			return sum.divide(cnt, 2, RoundingMode.HALF_UP);
 		}
 		return null;
 		

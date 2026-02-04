@@ -10,15 +10,19 @@ import java.util.List;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
+import config.CsvColumnConfig;
 import model.Order;
 import model.Order.OrderStatus;
+import validation.Validator;
 
 public class FileUtils
 {
 
 	@SuppressWarnings("unused")
-	public static ArrayList<Order> processCSV(File file)
+	public static ArrayList<Order> processCSV(CsvColumnConfig config, File file)
 	{
+		
+		
 		ArrayList<Order> orderList = new ArrayList<Order>();
 		List<String[]> allData = null;
 
@@ -37,11 +41,12 @@ public class FileUtils
 					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because it was missing data");
 					continue;
 				}
-				String orderID = line[0];
-				String customer = line[1];
-				BigDecimal orderValue = new BigDecimal(line[2]);
-				String country = line[3].toUpperCase();
-				if (country.length() != 2 || !Order.isoCountryCode.isValidCountry(country))
+				String orderID = line[config.getOrderIdIndex()];
+				String customer = line[config.getCustomerIndex()];
+				BigDecimal orderValue = new BigDecimal(line[config.getOrderValueIndex()]);
+				String country = line[config.getCountryIndex()].toUpperCase();
+				
+				if (!Validator.validateISOCountryCode(country))
 				{
 					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its country code (" + country + ") was invalid");
 					continue;
