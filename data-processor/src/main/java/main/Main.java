@@ -40,7 +40,10 @@ public class Main
 		table.addRule();
 		System.out.println(table.render());
 		System.out.printf("Avg order value = %.2f€\n", StatisticsProcessor.getAvgOrderValue(orderList));
+		System.out.println("Total order value by countries:");
 		System.out.println(StatisticsProcessor.getOrderValueByCountry(orderList));
+		System.out.println("Total order amount = " + StatisticsProcessor.getOrderCount(orderList));
+		System.out.println("High Value count = " + StatisticsProcessor.getHighValueOrderCount(orderList));
 	}
 
 }
