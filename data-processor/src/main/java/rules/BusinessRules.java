@@ -7,7 +7,7 @@ public class BusinessRules
 {
 	private static BigDecimal highValueLimit = new BigDecimal(10000);
 	
-	private static String[] euCountryCodes = {
+	private final static String[] euCountryCodes = {
 		    "AT", // Austria
 		    "BE", // Belgium
 		    "BG", // Bulgaria
@@ -46,7 +46,7 @@ public class BusinessRules
 		return highValueLimit;
 	}
 	
-	public static boolean isEUCounry(String code)
+	public static boolean isEUCountry(String code)
 	{
 		return Arrays.asList(euCountryCodes).contains(code);
 	}

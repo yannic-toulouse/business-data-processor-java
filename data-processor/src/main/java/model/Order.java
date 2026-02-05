@@ -46,7 +46,7 @@ public class Order
 		if (this.orderValue.compareTo(BusinessRules.getHighValueLimit()) > 0)
 			flags.add(Flag.HIGH_VALUE);
 		
-		if(!BusinessRules.isEUCounry(country))
+		if(!BusinessRules.isEUCountry(country))
 			flags.add(Flag.EXPORT_CHECK);
 		
 		
