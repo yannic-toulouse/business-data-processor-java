@@ -28,8 +28,8 @@ public class FileUtils
 	{
 		
 		
-		ArrayList<Order> orderList = new ArrayList<Order>();
-		List<String[]> allData = null;
+		ArrayList<Order> orderList = new ArrayList<>();
+		List<String[]> allData;
 
 		try (FileReader fReader = new FileReader(file);
 				CSVReader csvReader = new CSVReader(fReader))
@@ -81,7 +81,6 @@ public class FileUtils
 				catch(ExceptionInInitializerError e)
 				{
 					System.out.println("[Warning] Skipped line " + (allData.indexOf(line) + 1) + " because its order value was negative");
-					continue;
 				}
 				catch (IllegalArgumentException e)
 				{

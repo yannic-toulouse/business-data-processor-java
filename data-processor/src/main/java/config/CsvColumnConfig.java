@@ -6,7 +6,6 @@ package config;
 
 import model.Order;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
