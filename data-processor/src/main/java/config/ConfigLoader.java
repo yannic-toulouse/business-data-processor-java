@@ -1,7 +1,3 @@
-/**
- * ConfigLoader.java
- * 04.02.2026
- */
 package config;
 
 import java.io.File;
@@ -12,6 +8,12 @@ import java.util.Properties;
 
 public class ConfigLoader
 {
+	/**
+	 * Creates Properties object from String path to properties file
+	 * @param path Path to properties file
+	 * @return Properties object containing the properties defined in the specified properties file
+	 * @throws IOException if file either cannot be found or couldn't be read
+	 */
 	public static Properties load(String path) throws IOException
 	{
 		FileInputStream fiStream;

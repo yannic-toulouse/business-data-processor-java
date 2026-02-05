@@ -11,7 +11,7 @@ public class Validator
 {
 	/**
 	 * Validates that country code is valid ISO3166-1 alpha-2 code
-	 * @param code
+	 * @param code Country Code
 	 * @return {@code true} if {@code code} is a valid ISO3166-1 alpha-2 country code and returns {@code false} if it is not
 	 */
 	public static boolean validateISOCountryCode(String code)

@@ -18,7 +18,12 @@ import validation.Validator;
 public class FileUtils
 {
 
-	@SuppressWarnings("unused")
+	/**
+	 * Processes a csv file containing order data. File must contain the fields orderID, customer, orderValue and country
+	 * @param config Configuration of csv indexes for specified fields
+	 * @param file File to be processed
+	 * @return {@code ArrayList} of {@code Order} objects
+	 */
 	public static ArrayList<Order> processCSV(CsvColumnConfig config, File file)
 	{
 		
@@ -38,7 +43,7 @@ public class FileUtils
 				if (line.length < 5)
 				{
 					
-					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because it was missing data");
+					System.out.println("[Warning] Skipped line " + (allData.indexOf(line) + 1) + " because it was missing data");
 					continue;
 				}
 				String orderID = line[config.getOrderIdIndex()];
@@ -48,7 +53,7 @@ public class FileUtils
 				
 				if (!Validator.validateISOCountryCode(country))
 				{
-					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its country code (" + country + ") was invalid");
+					System.out.println("[Warning] Skipped line " + (allData.indexOf(line) + 1) + " because its country code (" + country + ") was invalid");
 					continue;
 				}
 				
@@ -60,7 +65,7 @@ public class FileUtils
 				}
 				catch (IllegalArgumentException e)
 				{
-					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its order status (" + line[4].trim() + ") was invalid");
+					System.out.println("[Warning] Skipped line " + (allData.indexOf(line) + 1) + " because its order status (" + line[4].trim() + ") was invalid");
 					continue;
 				}
 				
@@ -75,12 +80,12 @@ public class FileUtils
 				}
 				catch(ExceptionInInitializerError e)
 				{
-					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its order value was negative");
+					System.out.println("[Warning] Skipped line " + (allData.indexOf(line) + 1) + " because its order value was negative");
 					continue;
 				}
 				catch (IllegalArgumentException e)
 				{
-					System.out.println("Skipped line " + (allData.indexOf(line) + 1) + " because its order id (" + orderID + ") was not unique");
+					System.out.println("[Warning] Skipped line " + (allData.indexOf(line) + 1) + " because its order id (" + orderID + ") was not unique");
 				}
 			}
 		}
