@@ -3,7 +3,9 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Function;
 
 import config.ConfigLoader;
 import config.CsvColumnConfig;
@@ -24,48 +26,57 @@ public class Main
 			while(true)
 			{
 				System.out.println("Do you want to use the default CSV-Column config? (y/n)");
-				char useDefColumns = scan.nextLine().toLowerCase().charAt(0);
+				String useDefColumnsString = scan.nextLine();
+				char useDefColumns = 0;
+				if(!useDefColumnsString.isEmpty())
+					useDefColumns = useDefColumnsString.toLowerCase().charAt(0);
 				switch(useDefColumns)
 				{
 				case 'y':
 					columnConfig = new CsvColumnConfig();
 					break;
 				case 'n':
-					System.out.println("Path to properties file:");
-					configPath = scan.nextLine();
-					try
+					while(true)
 					{
-						columnConfig = new CsvColumnConfig(ConfigLoader.load(configPath));
-					}
-					catch (IOException e)
-					{
-						System.out.println("Failed to load config. Falling back to default config.\n" + 
-								"Detailed error message: " + e.getLocalizedMessage());
-						columnConfig = new CsvColumnConfig();
+						System.out.println("Path to properties file:");
+						configPath = scan.nextLine();
+						try {
+							columnConfig = new CsvColumnConfig(ConfigLoader.load(configPath));
+							break;
+						} catch (IOException e) {
+							System.out.println("Failed to load config.\n" +
+									"Detailed error message: " + e.getLocalizedMessage());
+						}
 					}
 					break;
 				default:
 					System.out.println("Please only enter the values 'y' or 'n'!");
 					continue;
 				}
-				System.out.println("Path to CSV file:");
-				file = new File(scan.nextLine().trim());
-				
-				if(file.exists() && !file.isDirectory())
-					break;
-				System.out.println(file.getAbsolutePath());
-				System.out.println("File doesn't exist. Please enter valid path");
+				while(true)
+				{
+					System.out.println("Path to CSV file:");
+					file = new File(scan.nextLine().trim());
+
+					if (file.exists() && !file.isDirectory())
+						break;
+					System.out.println(file.getAbsolutePath());
+					System.out.println("File doesn't exist. Please enter valid path");
+				}
+				break;
 			}
 		}
 
 		ArrayList<Order> orderList = FileUtils.processCSV(columnConfig, file);
+		Map<Integer, String> indexMap = columnConfig.getIndexMap();
+		Map<Integer, Function<Order, Object>> valueMap = columnConfig.getValueMap();
 		AsciiTable table = new AsciiTable();
 		table.addRule();
-		table.addRow("Order ID", "Customer", "Order Value", "Country", "Status", "Flags");
+		table.addRow(indexMap.get(0), indexMap.get(1), indexMap.get(2), indexMap.get(3), indexMap.get(4), "Flags");
 		for (Order item : orderList)
 		{
 			table.addRule();
-			table.addRow(item.getOrderID(), item.getCustomer(), item.getOrderValue(), item.getCountry(), item.getStatus(), item.flagAsString());
+			table.addRow(valueMap.get(0).apply(item), valueMap.get(1).apply(item), valueMap.get(2).apply(item), valueMap.get(3).apply(item), valueMap.get(4).apply(item), item.flagAsString());
 		}
 		table.addRule();
 		System.out.println(table.render());

@@ -4,7 +4,12 @@
  */
 package config;
 
+import model.Order;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
 
 public class CsvColumnConfig
 {
@@ -12,6 +17,11 @@ public class CsvColumnConfig
 	private final int customerIndex;
 	private final int orderValueIndex;
 	private final int countryIndex;
+	private final int statusIndex;
+	private final Map<Integer, String> indexMap;
+	private final Map<Integer, Function<Order, Object>> valueMap;
+
+
 
 	/**
 	 * Standard {@code CsvColumnConfig} default constructor.
@@ -23,6 +33,21 @@ public class CsvColumnConfig
 		this.customerIndex = 1;
 		this.orderValueIndex = 2;
 		this.countryIndex = 3;
+		this.statusIndex = 4;
+		indexMap = Map.of(
+				orderIdIndex, "Order ID",
+				customerIndex, "Customer",
+				orderValueIndex, "Order Value",
+				countryIndex, "Country",
+				statusIndex, "Status"
+		);
+		valueMap = Map.of(
+				orderIdIndex, Order::getOrderID,
+				customerIndex, Order::getCustomer,
+				orderValueIndex, Order::getOrderValue,
+				countryIndex, Order::getCountry,
+				statusIndex, Order::getStatus
+		);
 	}
 
 	/**
@@ -35,6 +60,21 @@ public class CsvColumnConfig
 		this.customerIndex = readProps(props, "csv.customer");
 		this.orderValueIndex = readProps(props, "csv.orderValue");
 		this.countryIndex = readProps(props, "csv.country");
+		this.statusIndex = readProps(props, "csv.status");
+		indexMap = Map.of(
+				orderIdIndex, "Order ID",
+				customerIndex, "Customer",
+				orderValueIndex, "Order Value",
+				countryIndex, "Country",
+				statusIndex, "Status"
+		);
+		valueMap = Map.of(
+				orderIdIndex, Order::getOrderID,
+				customerIndex, Order::getCustomer,
+				orderValueIndex, Order::getOrderValue,
+				countryIndex, Order::getCountry,
+				statusIndex, Order::getStatus
+		);
 	}
 
 	/**
@@ -81,8 +121,16 @@ public class CsvColumnConfig
 	{
 		return countryIndex;
 	}
-	
 
-	
-	
+	public Map<Integer, String> getIndexMap() {
+		return indexMap;
+	}
+
+	public int getStatusIndex() {
+		return statusIndex;
+	}
+
+	public Map<Integer, Function<Order, Object>> getValueMap() {
+		return valueMap;
+	}
 }

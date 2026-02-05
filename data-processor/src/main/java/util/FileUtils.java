@@ -61,7 +61,7 @@ public class FileUtils
 
 				try 
 				{
-					status = OrderStatus.valueOf(line[4].trim().replace(' ', '_').toUpperCase());
+					status = OrderStatus.valueOf(line[config.getStatusIndex()].trim().replace(' ', '_').toUpperCase());
 				}
 				catch (IllegalArgumentException e)
 				{
