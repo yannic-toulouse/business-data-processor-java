@@ -15,7 +15,7 @@ import model.Order;
 import model.Order.OrderStatus;
 import validation.Validator;
 
-public class FileUtils
+public class CsvProcessor
 {
 
 	/**
