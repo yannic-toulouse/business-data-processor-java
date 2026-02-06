@@ -17,6 +17,7 @@ public class CsvColumnConfig
 	private final int orderValueIndex;
 	private final int countryIndex;
 	private final int statusIndex;
+	private final boolean hasHeader;
 	private final Map<Integer, String> indexMap;
 	private final Map<Integer, Function<Order, Object>> valueMap;
 
@@ -33,6 +34,7 @@ public class CsvColumnConfig
 		this.orderValueIndex = 2;
 		this.countryIndex = 3;
 		this.statusIndex = 4;
+		this.hasHeader = true;
 		indexMap = Map.of(
 				orderIdIndex, "Order ID",
 				customerIndex, "Customer",
@@ -55,11 +57,12 @@ public class CsvColumnConfig
 	 */
 	public CsvColumnConfig(Properties props)
 	{
-		this.orderIdIndex = readProps(props, "csv.orderId");
-		this.customerIndex = readProps(props, "csv.customer");
-		this.orderValueIndex = readProps(props, "csv.orderValue");
-		this.countryIndex = readProps(props, "csv.country");
-		this.statusIndex = readProps(props, "csv.status");
+		this.orderIdIndex = readPropsInt(props, "csv.orderId");
+		this.customerIndex = readPropsInt(props, "csv.customer");
+		this.orderValueIndex = readPropsInt(props, "csv.orderValue");
+		this.countryIndex = readPropsInt(props, "csv.country");
+		this.statusIndex = readPropsInt(props, "csv.status");
+		this.hasHeader = readPropsBool(props, "csv.hasHeader");
 		indexMap = Map.of(
 				orderIdIndex, "Order ID",
 				customerIndex, "Customer",
@@ -82,7 +85,7 @@ public class CsvColumnConfig
 	 * @param key Value to be read from {@code props}
 	 * @return Value from {@code props} as an int
 	 */
-	private static int readProps(Properties props, String key)
+	private static int readPropsInt(Properties props, String key)
 	{
 		String valueString = props.getProperty(key);
 		int value;
@@ -94,6 +97,25 @@ public class CsvColumnConfig
 		try
 		{
 			value = Integer.parseInt(valueString);
+		}
+		catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Couldn't parse " + valueString + " from config file!", e);
+		}
+		return value;
+	}
+
+	private static boolean readPropsBool(Properties props, String key)
+	{
+		String valueString = props.getProperty(key);
+		boolean value;
+		if(valueString == null)
+		{
+			throw new IllegalArgumentException("Missing config key: " + key);
+		}
+
+		try
+		{
+			value = Boolean.parseBoolean(valueString);
 		}
 		catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Couldn't parse " + valueString + " from config file!", e);
@@ -119,6 +141,10 @@ public class CsvColumnConfig
 	public int getCountryIndex()
 	{
 		return countryIndex;
+	}
+
+	public boolean hasHeader() {
+		return hasHeader;
 	}
 
 	public Map<Integer, String> getIndexMap() {

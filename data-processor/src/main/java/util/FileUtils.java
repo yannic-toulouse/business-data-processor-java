@@ -34,7 +34,8 @@ public class FileUtils
 		try (FileReader fReader = new FileReader(file);
 				CSVReader csvReader = new CSVReader(fReader))
 		{
-			csvReader.readNext(); // Skip header row
+			if(config.hasHeader())
+				csvReader.readNext(); // Skip header row
 			allData = csvReader.readAll();
 			csvReader.close();
 			
