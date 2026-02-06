@@ -4,11 +4,11 @@
  */
 package config;
 
-import model.Order;
-
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
+
+import model.Order;
 
 public class CsvColumnConfig
 {
@@ -57,12 +57,12 @@ public class CsvColumnConfig
 	 */
 	public CsvColumnConfig(Properties props)
 	{
-		this.orderIdIndex = readPropsInt(props, "csv.orderId");
-		this.customerIndex = readPropsInt(props, "csv.customer");
-		this.orderValueIndex = readPropsInt(props, "csv.orderValue");
-		this.countryIndex = readPropsInt(props, "csv.country");
-		this.statusIndex = readPropsInt(props, "csv.status");
-		this.hasHeader = readPropsBool(props, "csv.hasHeader");
+		this.orderIdIndex = ConfigLoader.readPropsInt(props, "csv.orderId");
+		this.customerIndex = ConfigLoader.readPropsInt(props, "csv.customer");
+		this.orderValueIndex = ConfigLoader.readPropsInt(props, "csv.orderValue");
+		this.countryIndex = ConfigLoader.readPropsInt(props, "csv.country");
+		this.statusIndex = ConfigLoader.readPropsInt(props, "csv.status");
+		this.hasHeader = ConfigLoader.readPropsBool(props, "csv.hasHeader");
 		indexMap = Map.of(
 				orderIdIndex, "Order ID",
 				customerIndex, "Customer",
@@ -79,49 +79,7 @@ public class CsvColumnConfig
 		);
 	}
 
-	/**
-	 * Reads and validates values from Properties object
-	 * @param props Properties object to read from
-	 * @param key Value to be read from {@code props}
-	 * @return Value from {@code props} as an int
-	 */
-	private static int readPropsInt(Properties props, String key)
-	{
-		String valueString = props.getProperty(key);
-		int value;
-		if(valueString == null)
-		{
-			throw new IllegalArgumentException("Missing config key: " + key);
-		}
-		
-		try
-		{
-			value = Integer.parseInt(valueString);
-		}
-		catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Couldn't parse " + valueString + " from config file!", e);
-		}
-		return value;
-	}
 
-	private static boolean readPropsBool(Properties props, String key)
-	{
-		String valueString = props.getProperty(key);
-		boolean value;
-		if(valueString == null)
-		{
-			throw new IllegalArgumentException("Missing config key: " + key);
-		}
-
-		try
-		{
-			value = Boolean.parseBoolean(valueString);
-		}
-		catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Couldn't parse " + valueString + " from config file!", e);
-		}
-		return value;
-	}
 
 	public int getOrderIdIndex()
 	{

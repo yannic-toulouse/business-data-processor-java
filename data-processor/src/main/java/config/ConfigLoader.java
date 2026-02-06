@@ -19,7 +19,7 @@ public class ConfigLoader
 		FileInputStream fiStream;
 		try
 		{
-			fiStream = new FileInputStream(new File(path));
+			fiStream = new FileInputStream(path);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -36,5 +36,49 @@ public class ConfigLoader
 		{
 			throw new IOException("Couldn't load file " + new File(path).getAbsolutePath(), e);
 		}
+	}
+
+	/**
+	 * Reads and validates values from Properties object
+	 * @param props Properties object to read from
+	 * @param key Value to be read from {@code props}
+	 * @return Value from {@code props} as an int
+	 */
+	public static int readPropsInt(Properties props, String key)
+	{
+		String valueString = props.getProperty(key);
+		int value;
+		if(valueString == null)
+		{
+			throw new IllegalArgumentException("Missing config key: " + key);
+		}
+
+		try
+		{
+			value = Integer.parseInt(valueString);
+		}
+		catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Couldn't parse " + valueString + " from config file!", e);
+		}
+		return value;
+	}
+
+	public static boolean readPropsBool(Properties props, String key)
+	{
+		String valueString = props.getProperty(key);
+		boolean value;
+		if(valueString == null)
+		{
+			throw new IllegalArgumentException("Missing config key: " + key);
+		}
+
+		try
+		{
+			value = Boolean.parseBoolean(valueString);
+		}
+		catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Couldn't parse " + valueString + " from config file!", e);
+		}
+		return value;
 	}
 }
