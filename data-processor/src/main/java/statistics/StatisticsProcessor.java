@@ -11,9 +11,9 @@ import model.Order;
 public class StatisticsProcessor
 {
     /**
-     * Counts the number of orders in a List<Order>
+     * Counts the number of orders in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Total amount of orders in orderList
      */
     public static int getOrderCount(List<Order> orderList)
@@ -22,9 +22,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Counts the amount of high value orders in a List<Order>
+     * Counts the amount of high value orders in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Count of Order objects in orderList with the HIGH_VALUE flag
      */
     public static int getHighValueOrderCount(List<Order> orderList)
@@ -41,9 +41,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Counts the amount of orders marked as requiring an export check in a List<Order>
+     * Counts the amount of orders marked as requiring an export check in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Count of Order objects in orderList with the EXPORT_CHECK flag
      */
     public static int getExportCheckOrderCount(List<Order> orderList)
@@ -60,9 +60,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Sums order value of each Order in a List<Order>
+     * Sums order value of each Order in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Sum of orderValue of Order objects in orderList
      */
     public static BigDecimal getTotalOrderValue(List<Order> orderList)
@@ -76,9 +76,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Calculates the average order value in a List<Order>
+     * Calculates the average order value in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Average order value of all Order objects in orderList, or {@code null} if the list is empty
      */
     public static BigDecimal getAvgOrderValue(List<Order> orderList)
@@ -99,9 +99,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Finds the lowest order value in a List<Order>
+     * Finds the lowest order value in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Lowest order value in orderList, or {@code null} if the list is empty
      */
     public static BigDecimal getLowestOrderValue(List<Order> orderList)
@@ -120,9 +120,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Finds the highest order value in a List<Order>
+     * Finds the highest order value in a List
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Highest order value in orderList, or {@code null} if the list is empty
      */
     public static BigDecimal getHighestOrderValue(List<Order> orderList)
@@ -141,9 +141,9 @@ public class StatisticsProcessor
     }
 
     /**
-     * Calculates the total order values by country and stores them in a Map<String, BigDecimal>
+     * Calculates the total order values by country and stores them in a Map
      *
-     * @param orderList
+     * @param orderList List of Order objects to be processed
      * @return Total order value by country in orderList
      */
     public static Map<String, BigDecimal> getOrderValueByCountry(List<Order> orderList)
@@ -157,6 +157,11 @@ public class StatisticsProcessor
         return countryMap;
     }
 
+    /**
+     * Creates a complete report from all methods contained in {@code StatisticsProcessor}
+     * @param orderList List of Order objects to be processed
+     * @return ReportData record containing the generated statistics
+     */
     public static ReportData fullReport(List<Order> orderList)
     {
         int orderCount = StatisticsProcessor.getOrderCount(orderList);
