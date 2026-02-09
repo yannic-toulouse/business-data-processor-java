@@ -3,25 +3,27 @@ package model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import OrderExceptions.DuplicateOrderIdException;
+import OrderExceptions.NegativeOrderValueException;
 import rules.BusinessRules;
 
 import validation.Validator;
 
 public class Order
 {
-	private static ArrayList<String> orderIDList = new ArrayList<String>();
+	private static final ArrayList<String> orderIDList = new ArrayList<>();
 	
-	private String orderID;
-	private String customer;
-	private BigDecimal orderValue;
-	private String country;
+	private final String orderID;
+	private final String customer;
+	private final BigDecimal orderValue;
+	private final String country;
 	private OrderStatus status;
-	private ArrayList<Flag> flags = new ArrayList<Flag>();
+	private final ArrayList<Flag> flags = new ArrayList<>();
 
 	public Order(String orderID, String customer, BigDecimal orderValue, String country, OrderStatus status)
 	{
 		if (orderIDList.contains(orderID))
-			throw new IllegalArgumentException("Order IDs must be unique!");
+			throw new DuplicateOrderIdException(orderID);
 		
 		this.orderID = orderID;
 		orderIDList.add(orderID);
@@ -32,7 +34,7 @@ public class Order
 		}
 		else
 		{
-			throw new ExceptionInInitializerError("Order Value can't be negative!");
+			throw new NegativeOrderValueException(orderValue);
 		}
 		
 		country = country.toUpperCase();
@@ -66,19 +68,14 @@ public class Order
 
 		public boolean canTransitionTo(OrderStatus next)
 		{
-			switch (this)
-			{
-			case NEW:
-				return next == PAID || next == ON_HOLD || next == CANCELLED;
-			case PAID:
-				return next == PROCESSING || next == ON_HOLD || next == CANCELLED;
-			case SHIPPED:
-				return next == COMPLETED;
-			case ON_HOLD:
-				return next == PAID;
-			default:
-				return false;
-			}
+            return switch (this)
+            {
+                case NEW -> next == PAID || next == ON_HOLD || next == CANCELLED;
+                case PAID -> next == PROCESSING || next == ON_HOLD || next == CANCELLED;
+                case SHIPPED -> next == COMPLETED;
+                case ON_HOLD -> next == PAID;
+                default -> false;
+            };
 		}
 	}
 
@@ -86,8 +83,8 @@ public class Order
 	{
 		NONE,
 		HIGH_VALUE,
-		EXPORT_CHECK;
-	}
+		EXPORT_CHECK
+    }
 
 	public OrderStatus getStatus()
 	{
@@ -136,7 +133,7 @@ public class Order
 	
 	public ArrayList<String> flagAsString()
 	{
-		ArrayList<String> flagStrings = new ArrayList<String>();
+		ArrayList<String> flagStrings = new ArrayList<>();
 		for (Flag flag : this.flags)
 		{
 			flagStrings.add(flag.toString().replace('_', ' '));
