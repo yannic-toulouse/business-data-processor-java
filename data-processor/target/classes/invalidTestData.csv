@@ -1,4 +1,7 @@
 orderID,customer,orderValue,country,status
-2001,Bad Order,-50,USA,NEW
+2001,Bad Order,50,USA,NEW
 2002,Missing Status,120,UK
-2003,Invalid Status,300,Germany,DELIVERED
+2003,Negative value,-120,FR, COMPLETED
+2004,Invalid Status,300,DE,DELIVERED
+2005,Duplicate ID,500,US,ON HOLD
+2005,Duplicate ID,400,IT,PAID
