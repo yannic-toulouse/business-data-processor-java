@@ -2,26 +2,24 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.function.Function;
 
+import display.ReportDisplay;
 import config.ConfigLoader;
 import config.CsvColumnConfig;
-import de.vandermeer.asciitable.AsciiTable;
-import model.Order;
-import statistics.StatisticsProcessor;
-import util.CsvProcessor;
+import processing.ProcessingEngine;
+import statistics.ReportData;
 import util.ReportWriter;
 
 public class Main
 {
     public static void main(String[] args) throws IOException
     {
+        String fileString;
         File file;
         CsvColumnConfig columnConfig;
         String configPath;
+        ProcessingEngine procEngine;
         try (Scanner scan = new Scanner(System.in))
         {
             while (true)
@@ -35,6 +33,7 @@ public class Main
                 {
                     case 'y':
                         columnConfig = new CsvColumnConfig();
+                        procEngine = new ProcessingEngine(columnConfig);
                         break;
                     case 'n':
                         while (true)
@@ -44,6 +43,7 @@ public class Main
                             try
                             {
                                 columnConfig = new CsvColumnConfig(ConfigLoader.load(configPath));
+                                procEngine = new ProcessingEngine(columnConfig);
                                 break;
                             }
                             catch (IOException e)
@@ -57,10 +57,12 @@ public class Main
                         System.out.println("Please only enter the values 'y' or 'n'!");
                         continue;
                 }
+
                 while (true)
                 {
                     System.out.println("Path to CSV file:");
-                    file = new File(scan.nextLine().trim());
+                    fileString = scan.nextLine().trim();
+                    file = new File(fileString);
 
                     if (file.exists() && !file.isDirectory())
                         break;
@@ -70,25 +72,10 @@ public class Main
                 break;
             }
 
+            ReportData reportData = procEngine.fullProcessing(fileString);
 
-            ArrayList<Order> orderList = CsvProcessor.processCSV(columnConfig, file);
-            Map<Integer, String> indexMap = columnConfig.getIndexMap();
-            Map<Integer, Function<Order, Object>> valueMap = columnConfig.getValueMap();
-            AsciiTable table = new AsciiTable();
-            table.addRule();
-            table.addRow(indexMap.get(0), indexMap.get(1), indexMap.get(2), indexMap.get(3), indexMap.get(4), "Flags");
-            for (Order item : orderList)
-            {
-                table.addRule();
-                table.addRow(valueMap.get(0).apply(item), valueMap.get(1).apply(item), valueMap.get(2).apply(item), valueMap.get(3).apply(item), valueMap.get(4).apply(item), item.flagAsString());
-            }
-            table.addRule();
-            System.out.println(table.render());
-            System.out.printf("Avg order value = %.2f€\n", StatisticsProcessor.getAvgOrderValue(orderList));
-            System.out.println("Total order value by countries:");
-            System.out.println(StatisticsProcessor.getOrderValueByCountry(orderList));
-            System.out.println("Total order amount = " + StatisticsProcessor.getOrderCount(orderList));
-            System.out.println("High Value count = " + StatisticsProcessor.getHighValueOrderCount(orderList));
+            ReportDisplay.displayReportAsTable(reportData, columnConfig);
+            ReportDisplay.displayReport(reportData);
 
             System.out.println("Where would you like to save the generated report? Enter nothing to delete report.");
             File savePath = new File(scan.nextLine());
@@ -128,7 +115,7 @@ public class Main
 
             try
             {
-                ReportWriter.writeReportToTxt(orderList, savePath, overwrite);
+                ReportWriter.writeReportToTxt(reportData, savePath, overwrite);
             }
             catch (IOException e)
             {
