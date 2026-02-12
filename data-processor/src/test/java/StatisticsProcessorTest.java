@@ -168,7 +168,7 @@ public class StatisticsProcessorTest
                 "FR", BusinessRules.getHighValueLimit().add(BigDecimal.ONE),
                 "CN", BusinessRules.getHighValueLimit().add(BigDecimal.ONE)
         );
-        ReportData reportData = new ReportData(orderCount, highValueOrderCount, exportCheckOrderCount, totalOrderValue, avgOrderValue, lowestOrderValue, highestOrderValue, orderValueByCountry);
+        ReportData reportData = new ReportData(orderList, orderCount, highValueOrderCount, exportCheckOrderCount, totalOrderValue, avgOrderValue, lowestOrderValue, highestOrderValue, orderValueByCountry);
         assertEquals(reportData, StatisticsProcessor.fullReport(orderList));
     }
 

@@ -173,7 +173,7 @@ public class StatisticsProcessor
         BigDecimal highestOrderValue = StatisticsProcessor.getHighestOrderValue(orderList);
         Map<String, BigDecimal> orderValueByCountry = StatisticsProcessor.getOrderValueByCountry(orderList);
 
-		return new ReportData(orderCount, highValueOrderCount, exportCheckOrderCount, totalOrderValue, avgOrderValue, lowestOrderValue, highestOrderValue, orderValueByCountry);
+		return new ReportData(orderList, orderCount, highValueOrderCount, exportCheckOrderCount, totalOrderValue, avgOrderValue, lowestOrderValue, highestOrderValue, orderValueByCountry);
     }
 
 }
