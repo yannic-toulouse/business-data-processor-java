@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import OrderExceptions.DuplicateOrderIdException;
+import OrderExceptions.InvalidCountryCodeException;
 import OrderExceptions.NegativeOrderValueException;
 import rules.BusinessRules;
 
@@ -41,7 +42,7 @@ public class Order
 		if(Validator.validateISOCountryCode(country))
 			this.country = country;
 		else
-			throw new IllegalArgumentException("Invalid country code. Must be in ISO 3166-1 alpha-2 format!");
+			throw new InvalidCountryCodeException(country);
 		
 		this.status = status;
 		
